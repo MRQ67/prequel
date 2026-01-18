@@ -11,6 +11,11 @@ import {
 import { mapSearchResult } from '../../lib/api/mappers';
 import { tmdbApi } from '../../lib/api/tmdb';
 
+function handleAdd(item: any) {
+    console.log('Add item:', item);
+    // Implement the logic to add the item to your database or state
+}
+
 export default function SearchScreen() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<any[]>([]);
@@ -78,7 +83,19 @@ export default function SearchScreen() {
                                 ({item.type === 'movie' ? "Movie" : "TV Show"})
                             </Text>
                         </Text>
-
+                        <Pressable
+                            onPress={() => handleAdd(item)}
+                            style={{
+                            marginTop: 6,
+                            alignSelf: "flex-start",
+                            paddingHorizontal: 10,
+                            paddingVertical: 4,
+                            backgroundColor: "#000",
+                            borderRadius: 6,
+                            }}
+                        >
+                            <Text style={{ color: "#fff" }}>+ Add</Text>
+                        </Pressable>
                         {item.overview ? (
                             <Text style={{fontSize: 14, color: '#555', marginTop: 4}}>
                                 {item.overview}
