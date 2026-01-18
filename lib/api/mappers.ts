@@ -19,3 +19,30 @@ export function mapTVSeriesRowToTVSeries(row: any) {
     firstAirDate: row.first_air_date,
   };
 }
+
+export function mapSearchResult(item: any) {
+  if (item.media_type === 'movie') {
+    return {
+      id: item.id,
+      tmdb_id: item.tmdb_id,
+      title: item.title,
+      overview: item.overview,
+      poster_path: item.poster_path,
+      release_date: item.release_date,
+      type: 'movie',
+    };
+  }
+
+  if (item.media_type === 'tv') {
+    return {
+      id: item.id,
+      tmdb_id: item.tmdb_id,
+      title: item.name,
+      overview: item.overview,
+      poster_path: item.poster_path,
+      first_air_date: item.first_air_date,
+      type: 'tv',
+    };
+  }
+  return null;
+}

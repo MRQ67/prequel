@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { useEffect, useState } from "react";
 import { initSchema } from "../lib/schema";
 
@@ -17,6 +17,6 @@ export default function RootLayout() {
   if (!isReady) {
     return null;
   }
-  
-  return <Stack />;
+
+  return <Slot />;
 }

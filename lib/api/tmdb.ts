@@ -1,6 +1,6 @@
 const baseurl = 'https://api.themoviedb.org/3';
 
-const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+const apiKey: string = process.env.EXPO_PUBLIC_TMDB_API_KEY!;
 
 if (!apiKey) {
   throw new Error('TMDB API key is not set in environment variables.');
