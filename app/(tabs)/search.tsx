@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     FlatList,
-    Pressable,
     Text,
     TextInput,
-    View,
+    View
 } from 'react-native';
 
+import SearchResultItem from '../../component/SearchResultItem';
 import { mapSearchResult } from '../../lib/api/mappers';
 import { tmdbApi } from '../../lib/api/tmdb';
 import { addToLibrary } from '../../lib/services/libraryService';
@@ -77,41 +77,19 @@ export default function SearchScreen() {
 
             <FlatList
                 data={results}
-                keyExtractor={(item) => `${item.type}-${item.id}`}
-                renderItem={({item}) => (
-                    <Pressable
-                        style={{paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#eee'}}
-                        onPress={() => {
-                            // Handle item press, e.g., navigate to details screen
-                        }}
-                    >
-                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                            {item.title} {" "}
-                            <Text style={{fontSize: 14, fontWeight: 'normal', color: 'gray'}}>
-                                ({item.type === 'movie' ? "Movie" : "TV Show"})
-                            </Text>
-                        </Text>
-                        <Pressable
-                            onPress={() => handleAdd(item)}
-                            style={{
-                            marginTop: 6,
-                            alignSelf: "flex-start",
-                            paddingHorizontal: 10,
-                            paddingVertical: 4,
-                            backgroundColor: "#000",
-                            borderRadius: 6,
-                            }}
-                        >
-                            <Text style={{ color: "#fff" }}>+ Add</Text>
-                        </Pressable>
-                        {item.overview ? (
-                            <Text style={{fontSize: 14, color: '#555', marginTop: 4}}>
-                                {item.overview}
-                            </Text>
-                        ) : null}
-                    </Pressable>
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <SearchResultItem item={item} onAdd={handleAdd} />
                 )}
+                ListEmptyComponent={
+                    !loading && query.trim().length >=2 ? (
+                        <Text style={{ textAlign: 'center', marginTop: 20, color: '#555' }}>
+                            No results found.       
+                        </Text>
+                    ) : null
+                }
             />
+
         </View>
     );
 }
