@@ -15,7 +15,7 @@ export function mapTVSeriesRowToTVSeries(row: any) {
     tmdb_id: row.tmdb_id,
     title: row.title,
     overview: row.overview,
-    posterPath: row.poster_path,
+    poster_path: row.poster_path,
     firstAirDate: row.first_air_date,
   };
 }

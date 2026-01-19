@@ -56,6 +56,7 @@ export default function SearchScreen() {
 
     return (
         <View style={{flex: 1, padding: 16, position: 'relative', marginTop: 40}}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Search</Text>
             <TextInput
                 placeholder="Search for movies or TV shows..."
                 value={query}   
