@@ -35,4 +35,7 @@ export const tmdbApi = {
     tvDetails: (tmdbId: number) =>
         fetchFromTMDB(`/tv/${tmdbId}`),
 
+    seasonDetails: (tmdbId: number, seasonNumber: number) =>
+        fetchFromTMDB(`/tv/${tmdbId}/season/${seasonNumber}`),
+
     };

@@ -10,10 +10,17 @@ import {
 
 import { mapSearchResult } from '../../lib/api/mappers';
 import { tmdbApi } from '../../lib/api/tmdb';
+import { addToLibrary } from '../../lib/services/libraryService';
 
-function handleAdd(item: any) {
-    console.log('Add item:', item);
-    // Implement the logic to add the item to your database or state
+
+
+async function handleAdd(item: any) {
+    try {
+        await addToLibrary(item);
+        alert(`${item.title} added to library!`);
+    } catch (error) {
+        console.error('Error adding item:', error);
+    }   
 }
 
 export default function SearchScreen() {
@@ -48,7 +55,7 @@ export default function SearchScreen() {
     }, [query]);
 
     return (
-        <View style={{flex: 1, padding: 16}}>
+        <View style={{flex: 1, padding: 16, position: 'relative', marginTop: 40}}>
             <TextInput
                 placeholder="Search for movies or TV shows..."
                 value={query}   

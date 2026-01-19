@@ -7,9 +7,20 @@ export default function TabsLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    tabBarLabel: 'Home',    
+                    tabBarLabel: 'Home',   
+                    headerShown: false, 
                     tabBarIcon: ({ color, size }) => (  
                         <Ionicons name="home" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="library"
+                options={{
+                    tabBarLabel: 'Library',
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="library" color={color} size={size} />
                     ),
                 }}
             />
@@ -17,6 +28,7 @@ export default function TabsLayout() {
                 name="search"
                 options={{
                     tabBarLabel: 'Search',
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (  
                         <Ionicons name="search" color={color} size={size} />
                     ),
