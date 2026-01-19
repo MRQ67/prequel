@@ -36,7 +36,7 @@ export default function LibraryScreen() {
     }
 
     return (
-        <View style={{ flex: 1, padding: 12, marginTop: 40, marginLeft: 7, marginRight: 5}}>
+        <View style={{ flex: 1, padding: 12, marginTop: 40, marginLeft: 5, marginRight: 5}}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>My Library</Text>
         <FlatList
             data={libraryItems}
@@ -44,7 +44,7 @@ export default function LibraryScreen() {
             numColumns={3}
             ListEmptyComponent={<LibraryEmptyState />}
             renderItem={({ item }) => (
-                <View style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: '#eee', alignItems: 'center'  }}> 
+                <View style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: '#eee', alignItems: 'center', marginBottom: 7 }}> 
                     <Image
                         source={ item.poster_path ? { uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` } : require('../../assets/placeholder.png') }
                         style={{ width: 100, height: 150, borderRadius: 4, marginRight: 16 }}
