@@ -8,6 +8,24 @@ import { addEpisodes } from "../repositories/episodesRepo";
 import { addMovies } from "../repositories/moviesRepo";
 import { addTVSeries } from "../repositories/tvRepo";
 
+import { mapTVDetailsToLibraryItem } from "../api/newMapper";
+import { getAllMovies } from "../repositories/moviesRepo";
+import { getAllTVSeries } from "../repositories/tvRepo";
+
+
+export async function getLibrary() {
+    const [movies, tvSeries] = await Promise.all([  
+        getAllMovies(),
+        getAllTVSeries(),
+    ]);
+
+    return [
+        ...movies.map(m => ({ ...mapMovieRowToMovie(m), type: 'movie' })),
+        ...tvSeries.map(tv => ({ ...mapTVSeriesRowToTVSeries(tv), type: 'tv' })),
+    ];
+}
+
+
 
 export async function addToLibrary(item: any) {
     if (item.type === "movie") {
@@ -19,7 +37,7 @@ export async function addToLibrary(item: any) {
 
     if (item.type === "tv") {
         const tvData = await tmdbApi.tvDetails(item.id);
-        const mappedSeries = mapTVSeriesRowToTVSeries(tvData);
+        const mappedSeries = mapTVDetailsToLibraryItem(tvData);
         const seriesResult = await addTVSeries(mappedSeries);
         
         const tvId = seriesResult.lastInsertRowId;

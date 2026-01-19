@@ -23,6 +23,11 @@ export async function addMovies(row: {
         ]
     );
     return result;
-    
-    
+}
+
+export async function getAllMovies() {
+    const db = await getDB();
+    return db.getAllAsync(
+        `SELECT * FROM movies ORDER BY added_at DESC`
+    );
 }
