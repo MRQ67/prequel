@@ -63,6 +63,7 @@ export default function SearchScreen() {
                     paddingHorizontal: 8,
                     marginBottom: 16,
                 }}
+                clearButtonMode="while-editing"
             />
 
             {loading && <ActivityIndicator />}
