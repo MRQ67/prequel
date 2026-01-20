@@ -1,4 +1,4 @@
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { initSchema } from "../lib/schema";
 
@@ -18,5 +18,5 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Slot />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

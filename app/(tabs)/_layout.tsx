@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 
 export default function TabsLayout() {
     return (
-        <Tabs>
+        <Tabs initialRouteName={undefined} backBehavior='history'>
             <Tabs.Screen
                 name="index"
                 options={{
