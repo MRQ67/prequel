@@ -46,7 +46,7 @@ export default function LibraryScreen() {
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>My Library</Text>
         <FlatList
             data={libraryItems}
-            keyExtractor={(item) => `${item.type}-${item.id}`}
+            keyExtractor={(item) => `${item.type}-${item.tmdb_id}`}
             numColumns={3}
             ListEmptyComponent={<LibraryEmptyState />}
             renderItem={({ item }) => (

@@ -1,7 +1,7 @@
 import { getDB } from "../db";
 
 export async function addMovies(row: {
-    id: number;
+    tmdb_id: number;
     title: string;
     overview?: string;
     release_date?: string;
@@ -14,7 +14,7 @@ export async function addMovies(row: {
      (tmdb_id, title, overview, poster_path, release_date)
      VALUES (?, ?, ?, ?, ?)`,
         [
-            row.id,
+            row.tmdb_id,
             row.title,
             row.overview || null,
             row.poster_path || null,

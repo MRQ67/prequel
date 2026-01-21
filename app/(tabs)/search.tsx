@@ -10,18 +10,7 @@ import {
 import SearchResultItem from '../../component/SearchResultItem';
 import { mapSearchResult } from '../../lib/api/mappers';
 import { tmdbApi } from '../../lib/api/tmdb';
-import { addToLibrary } from '../../lib/services/libraryService';
 
-
-
-async function handleAdd(item: any) {
-    try {
-        await addToLibrary(item);
-        alert(`${item.title} added to library!`);
-    } catch (error) {
-        console.error('Error adding item:', error);
-    }   
-}
 
 export default function SearchScreen() {
     const [query, setQuery] = useState('');
@@ -78,9 +67,9 @@ export default function SearchScreen() {
 
             <FlatList
                 data={results}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.tmdb_id.toString()}
                 renderItem={({ item }) => (
-                    <SearchResultItem item={item} onAdd={handleAdd} />
+                    <SearchResultItem item={item} />
                 )}
                 ListEmptyComponent={
                     !loading && query.trim().length >=2 ? (

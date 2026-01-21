@@ -64,6 +64,13 @@ async function createIndexes(db : SQLiteDatabase) {
   `);
 }
 
+export async function migrationEpsiode( ) {
+  const db = await getDB();
+  await db.execAsync(`
+    ALTER TABLE episodes ADD COLUMN overview TEXT
+  `);
+}
+
 export async function initSchema() {
     const db = await getDB();
 

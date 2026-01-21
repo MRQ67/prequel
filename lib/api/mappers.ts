@@ -1,6 +1,6 @@
 export function mapMovieRowToMovie(row: any) {
   return {
-    id: row.id,
+    tmdb_id: row.id,
     title: row.title,
     overview: row.overview,
     releaseDate: row.release_date,
@@ -11,8 +11,7 @@ export function mapMovieRowToMovie(row: any) {
 
 export function mapTVSeriesRowToTVSeries(row: any) {
   return {
-    id: row.id,
-    tmdb_id: row.tmdb_id,
+    tmdb_id: row.id,
     title: row.title,
     overview: row.overview,
     poster_path: row.poster_path,
@@ -23,8 +22,7 @@ export function mapTVSeriesRowToTVSeries(row: any) {
 export function mapSearchResult(item: any) {
   if (item.media_type === 'movie') {
     return {
-      id: item.id,
-      tmdb_id: item.tmdb_id,
+      tmdb_id: item.id,
       title: item.title,
       overview: item.overview,
       poster_path: item.poster_path,
@@ -35,8 +33,7 @@ export function mapSearchResult(item: any) {
 
   if (item.media_type === 'tv') {
     return {
-      id: item.id,
-      tmdb_id: item.tmdb_id,
+      tmdb_id: item.id,
       title: item.name,
       overview: item.overview,
       poster_path: item.poster_path,
