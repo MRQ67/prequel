@@ -148,6 +148,43 @@ export default function MediaDetailPage() {
                         {media.overview || 'No description available.'}
                     </Text>
                 </View>
+
+                {/* Episodes for TV Shows */}
+                {media_type === 'tv' && media.episodesBySeason && (
+                    <View style={styles.episodesSection}>
+                        <Text style={styles.sectionTitle}>Episodes</Text>
+
+                        {Object.keys(media.episodesBySeason)
+                            .sort((a, b) => parseInt(a) - parseInt(b)) // Sort seasons numerically
+                            .map((seasonNumber) => (
+                                <View key={seasonNumber} style={styles.seasonContainer}>
+                                    <Text style={styles.seasonTitle}>
+                                        Season {seasonNumber}
+                                    </Text>
+
+                                    {media.episodesBySeason[parseInt(seasonNumber)]?.map((episode: any) => (
+                                        <View key={episode.episode_number || episode.id} style={styles.episodeItem}>
+                                            <View style={styles.episodeHeader}>
+                                                <Text style={styles.episodeNumber}>
+                                                    E{episode.episode_number}: {episode.name || episode.title}
+                                                </Text>
+                                                {episode.air_date && (
+                                                    <Text style={styles.episodeAirDate}>
+                                                        {new Date(episode.air_date).toLocaleDateString()}
+                                                    </Text>
+                                                )}
+                                            </View>
+                                            {episode.overview && (
+                                                <Text style={styles.episodeOverview}>
+                                                    {episode.overview}
+                                                </Text>
+                                            )}
+                                        </View>
+                                    ))}
+                                </View>
+                            ))}
+                    </View>
+                )}
             </View>
         </ScrollView>
     );
@@ -252,5 +289,50 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '500',
+    },
+    episodesSection: {
+        marginTop: 20,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 12,
+        color: '#333',
+    },
+    seasonContainer: {
+        marginBottom: 20,
+    },
+    seasonTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: 8,
+        color: '#007AFF',
+    },
+    episodeItem: {
+        backgroundColor: '#f9f9f9',
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 8,
+    },
+    episodeHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+    episodeNumber: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#333',
+        flex: 1,
+    },
+    episodeAirDate: {
+        fontSize: 14,
+        color: '#666',
+    },
+    episodeOverview: {
+        fontSize: 14,
+        color: '#555',
+        lineHeight: 20,
     },
 });
