@@ -11,13 +11,14 @@ export async function addEpisodes(row: {
     for (const episode of row.episodes) {
         await db.runAsync(
             `INSERT OR IGNORE INTO episodes
-         (tv_series_id, season_number, episode_number, title, air_date)
-            VALUES (?, ?, ?, ?, ?)`,
+         (tv_series_id, season_number, episode_number, title, overview, air_date)
+            VALUES (?, ?, ?, ?, ?, ?)`,
             [
                 row.tv_series_id,
                 episode.season_number,
                 episode.episode_number,
                 episode.title || null,
+                episode.overview || null,
                 episode.air_date || null,
             ]
         );
@@ -40,6 +41,7 @@ export async function getEpisodesByTVSeriesId(tv_series_id: number) {
             episodesBySeason[episode.season_number] = [];
         }
         episodesBySeason[episode.season_number].push(episode);
+
     });
     
     return episodesBySeason;

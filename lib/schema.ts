@@ -40,6 +40,7 @@ async function createEpisodesTable(db : SQLiteDatabase) {
   season_number INTEGER NOT NULL,
   episode_number INTEGER NOT NULL,
   title TEXT,
+  overview TEXT,
   air_date TEXT,
   watched INTEGER NOT NULL DEFAULT 0,
   watched_at TEXT,
