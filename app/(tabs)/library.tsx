@@ -1,3 +1,4 @@
+import { useTheme } from "@/lib/contexts/ThemeContext";
 import { getLibrary } from "@/lib/services/libraryService";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
@@ -6,16 +7,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 function LibraryEmptyState() {
+    const { colors } = useTheme();
+
     return (
-        <View className="flex-1 justify-center items-center">
-            <Text className="text-lg text-gray-500">Your library is empty.</Text>
-            <Text className="text-base text-gray-500">Add movies or TV shows to get started</Text>
+        <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.background }}>
+            <Text className="text-lg" style={{ color: colors.mutedForeground }}>Your library is empty.</Text>
+            <Text className="text-base" style={{ color: colors.mutedForeground }}>Add movies or TV shows to get started</Text>
         </View>
     );
 }
 
 export default function LibraryScreen() {
     const [libraryItems, setLibraryItems] = useState<any[]>([]);
+    const { colors } = useTheme();
 
     const loadLibrary = async () => {
         const items = await getLibrary();
@@ -30,8 +34,8 @@ export default function LibraryScreen() {
 
     if (!libraryItems.length) {
         return (
-            <View className="flex-1 justify-center items-center">
-                <Text className="text-lg text-gray-500">Your library is empty.</Text>
+            <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.background }}>
+                <Text className="text-lg" style={{ color: colors.mutedForeground }}>Your library is empty.</Text>
             </View>
         );
     }
@@ -43,9 +47,11 @@ export default function LibraryScreen() {
     }
 
     return (
-        <SafeAreaView className="bg-white flex-1">
-            <View className="flex-1 p-3 pt-10">
-                <Text className="text-2xl font-bold mb-4">My Library</Text>
+        <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
+            <View className="flex-1 px-3" style={{ backgroundColor: colors.background }}>
+                <Text className="text-2xl font-bold mb-4" style={{ color: colors.foreground }}>
+                    My Library
+                </Text>
                 <FlatList
                     data={libraryItems}
                     keyExtractor={(item) => `${item.type}-${item.tmdb_id}`}
@@ -54,14 +60,15 @@ export default function LibraryScreen() {
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => handleItemPress(item)}
-                            className="flex-col border-b border-gray-100 items-center mb-2"
+                            className="flex-col items-center mb-2"
+                            style={{ borderBottomColor: colors.border }}
                         >
                             <Image
                                 source={ item.poster_path ? { uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` } : require('../../assets/placeholder.png') }
                                 className="w-24 h-36 rounded-md"
                                 resizeMode="cover"
                             />
-                            <Text className="text-base font-bold max-w-32 text-center mt-2">
+                            <Text className="text-base font-bold max-w-32 text-center mt-2" style={{ color: colors.foreground }}>
                                 {item.title || item.name} ({item.type.toUpperCase()})
                             </Text>
                         </TouchableOpacity>

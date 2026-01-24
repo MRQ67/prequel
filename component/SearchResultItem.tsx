@@ -1,3 +1,4 @@
+import { useTheme } from "@/lib/contexts/ThemeContext";
 import { isinLibrary } from '@/lib/services/libraryService';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ const POSTER_URL = 'https://image.tmdb.org/t/p/w92';
 
 export default function SearchResultItem({ item}: { item: any }) {
     const [inLibrary, setInLibrary] = useState(false);
+    const { colors } = useTheme();
 
     const title = item.title || item.name;
 
@@ -31,19 +33,21 @@ export default function SearchResultItem({ item}: { item: any }) {
     }
 
     return (
-        <TouchableOpacity className="mb-3 border border-gray-300"
+        <TouchableOpacity
+            className="mb-3 rounded-lg"
+            style={{ borderColor: colors.border, borderWidth: 1 }}
             onPress={handlePress}
         >
-            <View className="flex-row mb-4 items-center p-2.5 gap-2.5 bg-gray-100 rounded-lg">
+            <View className="flex-row mb-4 items-center p-2.5 gap-2.5 rounded-lg" style={{ backgroundColor: colors.card }}>
                 <Image
                     source={ item.poster_path ? { uri: `${POSTER_URL}${item.poster_path}` } : require('../assets/placeholder.png') }
                     className="w-15 h-22.5 rounded-md"
                     resizeMode="cover"
                 />
                 <View className="flex-1">
-                    <Text className="text-base font-bold">{title}</Text>
+                    <Text className="text-base font-bold" style={{ color: colors.foreground }}>{title}</Text>
                     {item.overview ? (
-                        <Text className="text-sm text-gray-600 mt-1" numberOfLines={3}>
+                        <Text className="text-sm mt-1" style={{ color: colors.mutedForeground }} numberOfLines={3}>
                             {item.overview}
                         </Text>
                     ) : null}
@@ -51,9 +55,10 @@ export default function SearchResultItem({ item}: { item: any }) {
                 <TouchableOpacity
                     disabled={inLibrary}
                     onPress={() => handleAdd(item)}
-                    className={`px-3 py-1.5 rounded ${inLibrary ? 'bg-gray-500' : 'bg-blue-600'}`}
+                    className="px-3 py-1.5 rounded"
+                    style={{ backgroundColor: inLibrary ? colors.muted : colors.primary }}
                 >
-                    <Text className="text-white text-sm">{inLibrary ? 'In Library' : '+ Add'}</Text>
+                    <Text className="text-sm" style={{ color: colors.primaryForeground }}>{inLibrary ? 'In Library' : '+ Add'}</Text>
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>

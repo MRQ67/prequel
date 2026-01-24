@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useTheme } from "@/lib/contexts/ThemeContext";
 import SearchResultItem from '../../component/SearchResultItem';
 import { mapSearchResult } from '../../lib/api/mappers';
 import { tmdbApi } from '../../lib/api/tmdb';
@@ -17,6 +18,7 @@ export default function SearchScreen() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const { colors } = useTheme();
 
     useEffect(() => {
         if (query.trim().length < 2) {
@@ -45,20 +47,28 @@ export default function SearchScreen() {
     }, [query]);
 
     return (
-        <SafeAreaView className="bg-white flex-1">
-            <View className="flex-1 p-4 pt-10">
-                <Text className="text-2xl font-bold mb-4">Search</Text>
+        <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
+            <View className="flex-1 px-3" style={{ backgroundColor: colors.background }}>
+                <Text className="text-2xl font-bold mb-4" style={{ color: colors.foreground }}>
+                    Search
+                </Text>
                 <TextInput
                     placeholder="Search for movies or TV shows..."
                     value={query}
                     onChangeText={setQuery}
                     autoCorrect={false}
                     autoCapitalize="none"
-                    className="h-10 border border-gray-300 rounded-lg px-2 mb-4"
+                    className="h-10 rounded-lg px-2 mb-4"
+                    style={{
+                        borderColor: colors.input,
+                        borderWidth: 1,
+                        color: colors.foreground,
+                        backgroundColor: colors.input
+                    }}
                     clearButtonMode="while-editing"
                 />
 
-                {loading && <ActivityIndicator className="mb-4"/>}
+                {loading && <ActivityIndicator className="mb-4" color={colors.primary}/>}
 
                 <FlatList
                     data={results}
@@ -68,7 +78,7 @@ export default function SearchScreen() {
                     )}
                     ListEmptyComponent={
                         !loading && query.trim().length >=2 ? (
-                            <Text className="text-center mt-5 text-gray-500">
+                            <Text className="text-center mt-5" style={{ color: colors.mutedForeground }}>
                                 No results found.
                             </Text>
                         ) : null
