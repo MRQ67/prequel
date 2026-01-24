@@ -6,6 +6,7 @@ import {
     TextInput,
     View
 } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import SearchResultItem from '../../component/SearchResultItem';
 import { mapSearchResult } from '../../lib/api/mappers';
@@ -44,42 +45,36 @@ export default function SearchScreen() {
     }, [query]);
 
     return (
-        <View style={{flex: 1, padding: 16, position: 'relative', marginTop: 40}}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Search</Text>
-            <TextInput
-                placeholder="Search for movies or TV shows..."
-                value={query}   
-                onChangeText={setQuery}
-                autoCorrect={false}
-                autoCapitalize="none"
-                style={{
-                    height: 40,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    paddingHorizontal: 8,
-                    marginBottom: 16,
-                }}
-                clearButtonMode="while-editing"
-            />
+        <SafeAreaView className="bg-white flex-1">
+            <View className="flex-1 p-4 pt-10">
+                <Text className="text-2xl font-bold mb-4">Search</Text>
+                <TextInput
+                    placeholder="Search for movies or TV shows..."
+                    value={query}
+                    onChangeText={setQuery}
+                    autoCorrect={false}
+                    autoCapitalize="none"
+                    className="h-10 border border-gray-300 rounded-lg px-2 mb-4"
+                    clearButtonMode="while-editing"
+                />
 
-            {loading && <ActivityIndicator />}
+                {loading && <ActivityIndicator className="mb-4"/>}
 
-            <FlatList
-                data={results}
-                keyExtractor={(item) => item.tmdb_id.toString()}
-                renderItem={({ item }) => (
-                    <SearchResultItem item={item} />
-                )}
-                ListEmptyComponent={
-                    !loading && query.trim().length >=2 ? (
-                        <Text style={{ textAlign: 'center', marginTop: 20, color: '#555' }}>
-                            No results found.       
-                        </Text>
-                    ) : null
-                }
-            />
-
-        </View>
+                <FlatList
+                    data={results}
+                    keyExtractor={(item) => item.tmdb_id.toString()}
+                    renderItem={({ item }) => (
+                        <SearchResultItem item={item} />
+                    )}
+                    ListEmptyComponent={
+                        !loading && query.trim().length >=2 ? (
+                            <Text className="text-center mt-5 text-gray-500">
+                                No results found.
+                            </Text>
+                        ) : null
+                    }
+                />
+            </View>
+        </SafeAreaView>
     );
 }

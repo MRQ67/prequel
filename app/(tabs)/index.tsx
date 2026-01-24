@@ -1,10 +1,12 @@
-
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
     return (
-        <View style={{ flex: 1, padding: 12, marginTop: 40, marginLeft: 7, marginRight: 5}}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Prequel</Text>
-        </View>
+        <SafeAreaView className="bg-white flex-1">
+            <View className="flex-1 px-3 pt-10">
+                <Text className="text-2xl font-bold mb-4">Prequel</Text>
+            </View>
+        </SafeAreaView>
     );
 }

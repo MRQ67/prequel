@@ -1,7 +1,8 @@
 import { getMediaWithFallback } from "@/lib/services/mediaService";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MediaDetailPage() {
     const { media_type, tmdb_id } = useLocalSearchParams();
@@ -50,19 +51,19 @@ export default function MediaDetailPage() {
 
     if (loading) {
         return (
-            <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="#007AFF" />
-                <Text style={styles.loadingText}>Loading media details...</Text>
+            <View className="flex-1 justify-center items-center p-5">
+                <ActivityIndicator size="large" className="mb-2" />
+                <Text className="text-gray-500 text-base">Loading media details...</Text>
             </View>
         );
     }
 
     if (error) {
         return (
-            <View style={styles.centerContainer}>
-                <Text style={styles.errorText}>{error}</Text>
-                <TouchableOpacity style={styles.button} onPress={handleGoBack}>
-                    <Text style={styles.buttonText}>Go Back</Text>
+            <View className="flex-1 justify-center items-center p-5">
+                <Text className="text-red-500 text-base text-center mb-5">{error}</Text>
+                <TouchableOpacity className="bg-blue-500 px-5 py-2.5 rounded-lg mt-5" onPress={handleGoBack}>
+                    <Text className="text-white text-base font-medium">Go Back</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -70,10 +71,10 @@ export default function MediaDetailPage() {
 
     if (!media) {
         return (
-            <View style={styles.centerContainer}>
-                <Text>No media data available</Text>
-                <TouchableOpacity style={styles.button} onPress={handleGoBack}>
-                    <Text style={styles.buttonText}>Go Back</Text>
+            <View className="flex-1 justify-center items-center p-5">
+                <Text className="mb-5">No media data available</Text>
+                <TouchableOpacity className="bg-blue-500 px-5 py-2.5 rounded-lg" onPress={handleGoBack}>
+                    <Text className="text-white text-base font-medium">Go Back</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -84,255 +85,110 @@ export default function MediaDetailPage() {
         : require('../../../assets/placeholder.png');
 
     return (
-        <ScrollView style={styles.container}>
-            {/* Header with back button */}
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-                    <Text style={styles.backButtonText}>← Back</Text>
-                </TouchableOpacity>
-            </View>
-
-            {/* Poster image */}
-            <Image
-                source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
-                style={styles.poster}
-                resizeMode="cover"
-            />
-
-            {/* Media details */}
-            <View style={styles.detailsContainer}>
-                <Text style={styles.title}>
-                    {media.title || media.name || 'Unknown Title'}
-                </Text>
-
-                {/* Release/Air date */}
-                {(media.release_date || media.first_air_date) && (
-                    <Text style={styles.dateText}>
-                        {media.release_date
-                            ? `Release Date: ${new Date(media.release_date).toLocaleDateString()}`
-                            : `First Air Date: ${new Date(media.first_air_date).toLocaleDateString()}`}
-                    </Text>
-                )}
-
-                {/* Rating */}
-                {(media.vote_average || media.rating) && (
-                    <Text style={styles.ratingText}>
-                        Rating: {(media.vote_average || media.rating)?.toFixed(1)}/10
-                    </Text>
-                )}
-
-                {/* Runtime (for movies) */}
-                {media.runtime && (
-                    <Text style={styles.runtimeText}>
-                        Runtime: {media.runtime} minutes
-                    </Text>
-                )}
-
-                {/* Seasons and episodes (for TV shows) */}
-                {media.number_of_seasons && (
-                    <Text style={styles.seasonText}>
-                        Seasons: {media.number_of_seasons}
-                    </Text>
-                )}
-
-                {media.number_of_episodes && (
-                    <Text style={styles.episodeText}>
-                        Episodes: {media.number_of_episodes}
-                    </Text>
-                )}
-
-                {/* Overview */}
-                <View style={styles.overviewContainer}>
-                    <Text style={styles.overviewTitle}>Overview</Text>
-                    <Text style={styles.overviewText}>
-                        {media.overview || 'No description available.'}
-                    </Text>
+        <SafeAreaView className="bg-white flex-1">
+            <ScrollView className="flex-1">
+                {/* Header with back button */}
+                <View className="flex-row items-center p-4 pt-12">
+                    <TouchableOpacity className="p-2" onPress={handleGoBack}>
+                        <Text className="text-blue-500 text-base font-medium">← Back</Text>
+                    </TouchableOpacity>
                 </View>
 
-                {/* Episodes for TV Shows */}
-                {media_type === 'tv' && media.episodesBySeason && (
-                    <View style={styles.episodesSection}>
-                        <Text style={styles.sectionTitle}>Episodes</Text>
+                {/* Poster image */}
+                <Image
+                    source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl}
+                    className="w-full h-96"
+                    resizeMode="cover"
+                />
 
-                        {Object.keys(media.episodesBySeason)
-                            .sort((a, b) => parseInt(a) - parseInt(b)) // Sort seasons numerically
-                            .map((seasonNumber) => (
-                                <View key={seasonNumber} style={styles.seasonContainer}>
-                                    <Text style={styles.seasonTitle}>
-                                        Season {seasonNumber}
-                                    </Text>
+                {/* Media details */}
+                <View className="p-4">
+                    <Text className="text-2xl font-bold mb-2 text-gray-800">
+                        {media.title || media.name || 'Unknown Title'}
+                    </Text>
 
-                                    {media.episodesBySeason[parseInt(seasonNumber)]?.map((episode: any) => (
-                                        <View key={episode.episode_number || episode.id} style={styles.episodeItem}>
-                                            <View style={styles.episodeHeader}>
-                                                <Text style={styles.episodeNumber}>
-                                                    E{episode.episode_number}: {episode.name || episode.title}
-                                                </Text>
-                                                {episode.air_date && (
-                                                    <Text style={styles.episodeAirDate}>
-                                                        {new Date(episode.air_date).toLocaleDateString()}
+                    {/* Release/Air date */}
+                    {(media.release_date || media.first_air_date) && (
+                        <Text className="text-base text-gray-500 mb-1">
+                            {media.release_date
+                                ? `Release Date: ${new Date(media.release_date).toLocaleDateString()}`
+                                : `First Air Date: ${new Date(media.first_air_date).toLocaleDateString()}`}
+                        </Text>
+                    )}
+
+                    {/* Rating */}
+                    {(media.vote_average || media.rating) && (
+                        <Text className="text-base text-gray-500 mb-1">
+                            Rating: {(media.vote_average || media.rating)?.toFixed(1)}/10
+                        </Text>
+                    )}
+
+                    {/* Runtime (for movies) */}
+                    {media.runtime && (
+                        <Text className="text-base text-gray-500 mb-1">
+                            Runtime: {media.runtime} minutes
+                        </Text>
+                    )}
+
+                    {/* Seasons and episodes (for TV shows) */}
+                    {media.number_of_seasons && (
+                        <Text className="text-base text-gray-500 mb-1">
+                            Seasons: {media.number_of_seasons}
+                        </Text>
+                    )}
+
+                    {media.number_of_episodes && (
+                        <Text className="text-base text-gray-500 mb-3">
+                            Episodes: {media.number_of_episodes}
+                        </Text>
+                    )}
+
+                    {/* Overview */}
+                    <View className="mt-3">
+                        <Text className="text-lg font-semibold mb-2 text-gray-800">Overview</Text>
+                        <Text className="text-base text-gray-600 leading-6">
+                            {media.overview || 'No description available.'}
+                        </Text>
+                    </View>
+
+                    {/* Episodes for TV Shows */}
+                    {media_type === 'tv' && media.episodesBySeason && (
+                        <View className="mt-5">
+                            <Text className="text-xl font-bold mb-3 text-gray-800">Episodes</Text>
+
+                            {Object.keys(media.episodesBySeason)
+                                .sort((a, b) => parseInt(a) - parseInt(b)) // Sort seasons numerically
+                                .map((seasonNumber) => (
+                                    <View key={seasonNumber} className="mb-5">
+                                        <Text className="text-lg font-semibold mb-2 text-blue-500">
+                                            Season {seasonNumber}
+                                        </Text>
+
+                                        {media.episodesBySeason[parseInt(seasonNumber)]?.map((episode: any) => (
+                                            <View key={episode.episode_number || episode.id} className="bg-gray-50 p-3 rounded-lg mb-2">
+                                                <View className="flex-row justify-between items-center mb-1">
+                                                    <Text className="text-base font-semibold text-gray-800 flex-1">
+                                                        E{episode.episode_number}: {episode.name || episode.title}
+                                                    </Text>
+                                                    {episode.air_date && (
+                                                        <Text className="text-sm text-gray-500">
+                                                            {new Date(episode.air_date).toLocaleDateString()}
+                                                        </Text>
+                                                    )}
+                                                </View>
+                                                {episode.overview && (
+                                                    <Text className="text-sm text-gray-600 leading-5">
+                                                        {episode.overview}
                                                     </Text>
                                                 )}
                                             </View>
-                                            {episode.overview && (
-                                                <Text style={styles.episodeOverview}>
-                                                    {episode.overview}
-                                                </Text>
-                                            )}
-                                        </View>
-                                    ))}
-                                </View>
-                            ))}
-                    </View>
-                )}
-            </View>
-        </ScrollView>
+                                        ))}
+                                    </View>
+                                ))}
+                        </View>
+                    )}
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    centerContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    loadingText: {
-        marginTop: 10,
-        fontSize: 16,
-        color: '#666',
-    },
-    errorText: {
-        fontSize: 16,
-        color: '#ff0000',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
-        paddingTop: 50, // Extra padding for status bar
-    },
-    backButton: {
-        padding: 8,
-    },
-    backButtonText: {
-        fontSize: 16,
-        color: '#007AFF',
-        fontWeight: '500',
-    },
-    poster: {
-        width: '100%',
-        height: 400,
-    },
-    detailsContainer: {
-        padding: 16,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 8,
-        color: '#333',
-    },
-    dateText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 4,
-    },
-    ratingText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 4,
-    },
-    runtimeText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 4,
-    },
-    seasonText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 4,
-    },
-    episodeText: {
-        fontSize: 16,
-        color: '#666',
-        marginBottom: 12,
-    },
-    overviewContainer: {
-        marginTop: 12,
-    },
-    overviewTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 8,
-        color: '#333',
-    },
-    overviewText: {
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#555',
-    },
-    button: {
-        backgroundColor: '#007AFF',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 8,
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '500',
-    },
-    episodesSection: {
-        marginTop: 20,
-    },
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 12,
-        color: '#333',
-    },
-    seasonContainer: {
-        marginBottom: 20,
-    },
-    seasonTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 8,
-        color: '#007AFF',
-    },
-    episodeItem: {
-        backgroundColor: '#f9f9f9',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 8,
-    },
-    episodeHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 4,
-    },
-    episodeNumber: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#333',
-        flex: 1,
-    },
-    episodeAirDate: {
-        fontSize: 14,
-        color: '#666',
-    },
-    episodeOverview: {
-        fontSize: 14,
-        color: '#555',
-        lineHeight: 20,
-    },
-});

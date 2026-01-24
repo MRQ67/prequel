@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Prequel is a React Native application built with Expo that serves as a media tracking application for movies and TV shows. The app integrates with The Movie Database (TMDB) API to allow users to search for, track, and manage their media library. It features a clean, modern UI with glass effect tab navigation and uses SQLite for local data persistence.
+Prequel is a React Native application built with Expo that serves as a media tracking application for movies and TV shows. The app integrates with The Movie Database (TMDB) API to allow users to search for, track, and manage their media library. It features a clean, modern UI with tab navigation and uses SQLite for local data persistence.
 
 ### Key Technologies
 - **Framework**: Expo (React Native)
@@ -16,7 +16,7 @@ Prequel is a React Native application built with Expo that serves as a media tra
 The app follows a modular architecture with clear separation of concerns:
 
 - **App Structure**: Uses Expo Router with a tab-based navigation system
-- **Components**: Reusable UI components (e.g., GlassTabBar, SearchResultItem)
+- **Components**: Reusable UI components (e.g., SearchResultItem)
 - **Libraries**: Business logic organized in `/lib` directory with subdirectories for API, repositories, and services
 - **Database**: SQLite schema defined in `/lib/schema.ts` with repositories managing data access
 - **API Layer**: TMDB API integration in `/lib/api/tmdb.ts` with data mapping utilities
@@ -83,4 +83,4 @@ The application uses SQLite with three main tables:
 - `lib/schema.ts`: Database schema definitions
 - `lib/db.ts`: Database connection management
 - `lib/services/libraryService.ts`: Library management business logic
-- `component/GlassTabBar.tsx`: Custom glass effect tab bar component
+- `component/SearchResultItem.tsx`: Component for displaying search results

@@ -31,36 +31,31 @@ export default function SearchResultItem({ item}: { item: any }) {
     }
 
     return (
-        <TouchableOpacity style={{ marginBottom: 12,  borderColor: '#ddd' }}
+        <TouchableOpacity className="mb-3 border border-gray-300"
             onPress={handlePress}
         >
-        <View style={{ flexDirection: 'row', marginBottom: 16, alignItems: 'center', padding: 10, gap: 10, backgroundColor: '#f0f0f0', borderRadius: 8 }}>
-            <Image
-                source={ item.poster_path ? { uri: `${POSTER_URL}${item.poster_path}` } : require('../assets/placeholder.png') }
-                style={{ width: 60, height: 90, borderRadius: 4 }}
-                resizeMode="cover"
-            />
-            <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{title}</Text>
-                {item.overview ? (
-                    <Text style={{ fontSize: 14, color: '#555', marginTop: 4 }} numberOfLines={3}>
-                        {item.overview}
-                    </Text>
-                ) : null}
+            <View className="flex-row mb-4 items-center p-2.5 gap-2.5 bg-gray-100 rounded-lg">
+                <Image
+                    source={ item.poster_path ? { uri: `${POSTER_URL}${item.poster_path}` } : require('../assets/placeholder.png') }
+                    className="w-15 h-22.5 rounded-md"
+                    resizeMode="cover"
+                />
+                <View className="flex-1">
+                    <Text className="text-base font-bold">{title}</Text>
+                    {item.overview ? (
+                        <Text className="text-sm text-gray-600 mt-1" numberOfLines={3}>
+                            {item.overview}
+                        </Text>
+                    ) : null}
+                </View>
+                <TouchableOpacity
+                    disabled={inLibrary}
+                    onPress={() => handleAdd(item)}
+                    className={`px-3 py-1.5 rounded ${inLibrary ? 'bg-gray-500' : 'bg-blue-600'}`}
+                >
+                    <Text className="text-white text-sm">{inLibrary ? 'In Library' : '+ Add'}</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                disabled={inLibrary}
-                onPress={() => handleAdd(item)}
-                style={{
-                    paddingHorizontal: 12,
-                    paddingVertical: 6,
-                    backgroundColor: inLibrary ? '#888' : '#007bff',
-                    borderRadius: 4,
-                }}
-            >
-                <Text style={{ color: '#fff', fontSize: 14 }}>{inLibrary ? 'In Library' : '+ Add'}</Text>
-            </TouchableOpacity>
-        </View>
         </TouchableOpacity>
     );
 }
