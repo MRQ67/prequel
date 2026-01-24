@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../../../lib/contexts/ThemeContext";
-import { removeFromLibrary } from "../../../lib/services/libraryService";
-import { isinLibrary } from "../../../lib/services/libraryService";
-import { addToLibrary } from "../../../lib/services/libraryService";
+import { addToLibrary, isinLibrary, removeFromLibrary } from "../../../lib/services/libraryService";
 
 export default function MediaDetailPage() {
     const { media_type, tmdb_id } = useLocalSearchParams();
@@ -153,7 +151,7 @@ export default function MediaDetailPage() {
         <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
             <ScrollView className="flex-1" style={{ backgroundColor: colors.background }}>
                 {/* Header with back button and conditional add/delete button */}
-                <View className="flex-row items-center justify-between p-4 pt-12">
+                <View className="flex-row items-center justify-between p-4">
                     <TouchableOpacity className="p-2" onPress={handleGoBack}>
                         <Text className="text-base font-medium" style={{ color: colors.primary }}>← Back</Text>
                     </TouchableOpacity>
