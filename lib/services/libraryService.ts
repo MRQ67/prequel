@@ -66,3 +66,35 @@ export async function addToLibrary(item: any) {
     }
 }
 
+export async function removeFromLibrary(media_type: 'movie' | 'tv', tmdb_id: number) {
+    const db = await getDB();
+
+    if (media_type === 'movie') {
+        // Delete the movie from the movies table
+        await db.runAsync(
+            `DELETE FROM movies WHERE tmdb_id = ?`,
+            [tmdb_id]
+        );
+    } else if (media_type === 'tv') {
+        // Get the TV series ID first
+        const tvSeries = await db.getFirstAsync<{ id: number }>(
+            `SELECT id FROM tv_series WHERE tmdb_id = ?`,
+            [tmdb_id]
+        );
+
+        if (tvSeries) {
+            // Delete associated episodes first
+            await db.runAsync(
+                `DELETE FROM episodes WHERE tv_series_id = ?`,
+                [tvSeries.id]
+            );
+
+            // Then delete the TV series
+            await db.runAsync(
+                `DELETE FROM tv_series WHERE tmdb_id = ?`,
+                [tmdb_id]
+            );
+        }
+    }
+}
+

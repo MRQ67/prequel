@@ -1,15 +1,19 @@
 import { getMediaWithFallback } from "@/lib/services/mediaService";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../../../lib/contexts/ThemeContext";
+import { removeFromLibrary } from "../../../lib/services/libraryService";
+import { isinLibrary } from "../../../lib/services/libraryService";
+import { addToLibrary } from "../../../lib/services/libraryService";
 
 export default function MediaDetailPage() {
     const { media_type, tmdb_id } = useLocalSearchParams();
     const [media, setMedia] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [inLibrary, setInLibrary] = useState<boolean>(false);
     const { colors } = useTheme();
 
     useEffect(() => {
@@ -31,6 +35,13 @@ export default function MediaDetailPage() {
 
                 if (data) {
                     setMedia(data);
+
+                    // Check if media is in library
+                    const isInLibrary = await isinLibrary(
+                        media_type as 'movie' | 'tv',
+                        parseInt(tmdb_id as string, 10)
+                    );
+                    setInLibrary(isInLibrary);
                 } else {
                     setError("Media not found");
                 }
@@ -49,6 +60,50 @@ export default function MediaDetailPage() {
 
     const handleGoBack = () => {
         router.back();
+    };
+
+    const handleDeleteFromLibrary = () => {
+        Alert.alert(
+            "Remove from Library",
+            `Are you sure you want to remove "${media.title || media.name}" from your library?`,
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Remove",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            await removeFromLibrary(media_type as 'movie' | 'tv', parseInt(tmdb_id as string, 10));
+                            setInLibrary(false); // Update state after removal
+                        } catch (err) {
+                            console.error("Error removing from library:", err);
+                            Alert.alert("Error", "Failed to remove item from library");
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
+    const handleAddToLibrary = async () => {
+        try {
+            // Create a temporary item object to pass to addToLibrary
+            const item = {
+                type: media_type,
+                tmdb_id: parseInt(tmdb_id as string, 10),
+                title: media.title || media.name,
+            };
+
+            await addToLibrary(item);
+            setInLibrary(true); // Update state after addition
+            Alert.alert("Success", `${media.title || media.name} added to library!`);
+        } catch (err) {
+            console.error("Error adding to library:", err);
+            Alert.alert("Error", "Failed to add item to library");
+        }
     };
 
     if (loading) {
@@ -97,10 +152,25 @@ export default function MediaDetailPage() {
     return (
         <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
             <ScrollView className="flex-1" style={{ backgroundColor: colors.background }}>
-                {/* Header with back button */}
-                <View className="flex-row items-center p-4 pt-12">
+                {/* Header with back button and conditional add/delete button */}
+                <View className="flex-row items-center justify-between p-4 pt-12">
                     <TouchableOpacity className="p-2" onPress={handleGoBack}>
                         <Text className="text-base font-medium" style={{ color: colors.primary }}>← Back</Text>
+                    </TouchableOpacity>
+
+                    {/* Conditional button - "Delete" if in library, "Add" if not */}
+                    <TouchableOpacity
+                        className="p-2"
+                        onPress={inLibrary ? handleDeleteFromLibrary : handleAddToLibrary}
+                    >
+                        <Text
+                            className="text-base font-medium"
+                            style={{
+                                color: inLibrary ? colors.destructive : colors.primary
+                            }}
+                        >
+                            {inLibrary ? "Delete" : "Add"}
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
