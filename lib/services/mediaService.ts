@@ -12,7 +12,7 @@ export async function getMediaWithFallback(
 
     if (media_type === 'movie') {
         const movieThere = await db.getFirstAsync(
-            `SELECT * FROM movies WHERE id = ?`,
+            `SELECT * FROM movies WHERE tmdb_id = ?`,
             [tmdb_id]
         );
         if (movieThere) {

@@ -10,9 +10,9 @@ export async function addMovies(row: {
 }) {
     const db = await getDB();
     const result = await db.runAsync(
-        `INSERT OR IGNORE INTO movies 
-     (tmdb_id, title, overview, poster_path, release_date)
-     VALUES (?, ?, ?, ?, ?)`,
+        `INSERT OR IGNORE INTO movies
+     (tmdb_id, title, overview, poster_path, release_date, rating)
+     VALUES (?, ?, ?, ?, ?, ?)`,
         [
             row.tmdb_id,
             row.title,

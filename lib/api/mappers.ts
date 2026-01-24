@@ -1,6 +1,6 @@
 export function mapMovieRowToMovie(row: any) {
   return {
-    tmdb_id: row.id,
+    tmdb_id: row.tmdb_id,
     title: row.title,
     overview: row.overview,
     releaseDate: row.release_date,
@@ -11,7 +11,7 @@ export function mapMovieRowToMovie(row: any) {
 
 export function mapTVSeriesRowToTVSeries(row: any) {
   return {
-    tmdb_id: row.id,
+    tmdb_id: row.tmdb_id,
     title: row.title,
     overview: row.overview,
     poster_path: row.poster_path,
