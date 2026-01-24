@@ -3,12 +3,14 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../../lib/contexts/ThemeContext";
 
 export default function MediaDetailPage() {
     const { media_type, tmdb_id } = useLocalSearchParams();
     const [media, setMedia] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const { colors } = useTheme();
 
     useEffect(() => {
         const fetchMedia = async () => {
@@ -51,19 +53,23 @@ export default function MediaDetailPage() {
 
     if (loading) {
         return (
-            <View className="flex-1 justify-center items-center p-5">
-                <ActivityIndicator size="large" className="mb-2" />
-                <Text className="text-gray-500 text-base">Loading media details...</Text>
+            <View className="flex-1 justify-center items-center p-5" style={{ backgroundColor: colors.background }}>
+                <ActivityIndicator size="large" className="mb-2" color={colors.primary} />
+                <Text className="text-base" style={{ color: colors.mutedForeground }}>Loading media details...</Text>
             </View>
         );
     }
 
     if (error) {
         return (
-            <View className="flex-1 justify-center items-center p-5">
-                <Text className="text-red-500 text-base text-center mb-5">{error}</Text>
-                <TouchableOpacity className="bg-blue-500 px-5 py-2.5 rounded-lg mt-5" onPress={handleGoBack}>
-                    <Text className="text-white text-base font-medium">Go Back</Text>
+            <View className="flex-1 justify-center items-center p-5" style={{ backgroundColor: colors.background }}>
+                <Text className="text-base text-center mb-5" style={{ color: colors.destructive }}>{error}</Text>
+                <TouchableOpacity
+                    className="px-5 py-2.5 rounded-lg mt-5"
+                    style={{ backgroundColor: colors.primary }}
+                    onPress={handleGoBack}
+                >
+                    <Text className="text-base font-medium" style={{ color: colors.primaryForeground }}>Go Back</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -71,10 +77,14 @@ export default function MediaDetailPage() {
 
     if (!media) {
         return (
-            <View className="flex-1 justify-center items-center p-5">
-                <Text className="mb-5">No media data available</Text>
-                <TouchableOpacity className="bg-blue-500 px-5 py-2.5 rounded-lg" onPress={handleGoBack}>
-                    <Text className="text-white text-base font-medium">Go Back</Text>
+            <View className="flex-1 justify-center items-center p-5" style={{ backgroundColor: colors.background }}>
+                <Text className="mb-5" style={{ color: colors.foreground }}>No media data available</Text>
+                <TouchableOpacity
+                    className="px-5 py-2.5 rounded-lg"
+                    style={{ backgroundColor: colors.primary }}
+                    onPress={handleGoBack}
+                >
+                    <Text className="text-base font-medium" style={{ color: colors.primaryForeground }}>Go Back</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -85,12 +95,12 @@ export default function MediaDetailPage() {
         : require('../../../assets/placeholder.png');
 
     return (
-        <SafeAreaView className="bg-white flex-1">
-            <ScrollView className="flex-1">
+        <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
+            <ScrollView className="flex-1" style={{ backgroundColor: colors.background }}>
                 {/* Header with back button */}
                 <View className="flex-row items-center p-4 pt-12">
                     <TouchableOpacity className="p-2" onPress={handleGoBack}>
-                        <Text className="text-blue-500 text-base font-medium">← Back</Text>
+                        <Text className="text-base font-medium" style={{ color: colors.primary }}>← Back</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -103,13 +113,13 @@ export default function MediaDetailPage() {
 
                 {/* Media details */}
                 <View className="p-4">
-                    <Text className="text-2xl font-bold mb-2 text-gray-800">
+                    <Text className="text-2xl font-bold mb-2" style={{ color: colors.foreground }}>
                         {media.title || media.name || 'Unknown Title'}
                     </Text>
 
                     {/* Release/Air date */}
                     {(media.release_date || media.first_air_date) && (
-                        <Text className="text-base text-gray-500 mb-1">
+                        <Text className="text-base mb-1" style={{ color: colors.mutedForeground }}>
                             {media.release_date
                                 ? `Release Date: ${new Date(media.release_date).toLocaleDateString()}`
                                 : `First Air Date: ${new Date(media.first_air_date).toLocaleDateString()}`}
@@ -118,35 +128,35 @@ export default function MediaDetailPage() {
 
                     {/* Rating */}
                     {(media.vote_average || media.rating) && (
-                        <Text className="text-base text-gray-500 mb-1">
+                        <Text className="text-base mb-1" style={{ color: colors.mutedForeground }}>
                             Rating: {(media.vote_average || media.rating)?.toFixed(1)}/10
                         </Text>
                     )}
 
                     {/* Runtime (for movies) */}
                     {media.runtime && (
-                        <Text className="text-base text-gray-500 mb-1">
+                        <Text className="text-base mb-1" style={{ color: colors.mutedForeground }}>
                             Runtime: {media.runtime} minutes
                         </Text>
                     )}
 
                     {/* Seasons and episodes (for TV shows) */}
                     {media.number_of_seasons && (
-                        <Text className="text-base text-gray-500 mb-1">
+                        <Text className="text-base mb-1" style={{ color: colors.mutedForeground }}>
                             Seasons: {media.number_of_seasons}
                         </Text>
                     )}
 
                     {media.number_of_episodes && (
-                        <Text className="text-base text-gray-500 mb-3">
+                        <Text className="text-base mb-3" style={{ color: colors.mutedForeground }}>
                             Episodes: {media.number_of_episodes}
                         </Text>
                     )}
 
                     {/* Overview */}
                     <View className="mt-3">
-                        <Text className="text-lg font-semibold mb-2 text-gray-800">Overview</Text>
-                        <Text className="text-base text-gray-600 leading-6">
+                        <Text className="text-lg font-semibold mb-2" style={{ color: colors.foreground }}>Overview</Text>
+                        <Text className="text-base leading-6" style={{ color: colors.mutedForeground }}>
                             {media.overview || 'No description available.'}
                         </Text>
                     </View>
@@ -154,30 +164,34 @@ export default function MediaDetailPage() {
                     {/* Episodes for TV Shows */}
                     {media_type === 'tv' && media.episodesBySeason && (
                         <View className="mt-5">
-                            <Text className="text-xl font-bold mb-3 text-gray-800">Episodes</Text>
+                            <Text className="text-xl font-bold mb-3" style={{ color: colors.foreground }}>Episodes</Text>
 
                             {Object.keys(media.episodesBySeason)
                                 .sort((a, b) => parseInt(a) - parseInt(b)) // Sort seasons numerically
                                 .map((seasonNumber) => (
                                     <View key={seasonNumber} className="mb-5">
-                                        <Text className="text-lg font-semibold mb-2 text-blue-500">
+                                        <Text className="text-lg font-semibold mb-2" style={{ color: colors.primary }}>
                                             Season {seasonNumber}
                                         </Text>
 
                                         {media.episodesBySeason[parseInt(seasonNumber)]?.map((episode: any) => (
-                                            <View key={episode.episode_number || episode.id} className="bg-gray-50 p-3 rounded-lg mb-2">
+                                            <View
+                                                key={episode.episode_number || episode.id}
+                                                className="p-3 rounded-lg mb-2"
+                                                style={{ backgroundColor: colors.card }}
+                                            >
                                                 <View className="flex-row justify-between items-center mb-1">
-                                                    <Text className="text-base font-semibold text-gray-800 flex-1">
+                                                    <Text className="text-base font-semibold flex-1" style={{ color: colors.foreground }}>
                                                         E{episode.episode_number}: {episode.name || episode.title}
                                                     </Text>
                                                     {episode.air_date && (
-                                                        <Text className="text-sm text-gray-500">
+                                                        <Text className="text-sm" style={{ color: colors.mutedForeground }}>
                                                             {new Date(episode.air_date).toLocaleDateString()}
                                                         </Text>
                                                     )}
                                                 </View>
                                                 {episode.overview && (
-                                                    <Text className="text-sm text-gray-600 leading-5">
+                                                    <Text className="text-sm leading-5" style={{ color: colors.mutedForeground }}>
                                                         {episode.overview}
                                                     </Text>
                                                 )}
